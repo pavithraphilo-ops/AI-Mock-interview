@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Domain - AI Mock Interview</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-content">
+                <a href="{{ url_for('index') }}" class="navbar-title">🤖 AI Mock Interview System</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <section class="domain-section">
+                <div class="domain-container">
+                    <h2>Select Interview Domain</h2>
+                    <p class="domain-description">
+                        Choose the technical domain for your mock interview. Questions will be tailored to your selected domain.
+                    </p>
+
+                    <!-- Domain Cards -->
+                    <div class="domain-grid">
+                        <div class="domain-card" data-domain="Cyber Security">
+                            <div class="domain-icon">🔐</div>
+                            <h3>Cyber Security</h3>
+                            <p>Security, Network Protection, Encryption, and Threat Prevention</p>
+                            <button class="btn btn-domain">Select</button>
+                        </div>
+
+                        <div class="domain-card" data-domain="Python Full Stack">
+                            <div class="domain-icon">🐍</div>
+                            <h3>Python Full Stack</h3>
+                            <p>Web Development, Flask/Django, Frontend, Backend, and REST APIs</p>
+                            <button class="btn btn-domain">Select</button>
+                        </div>
+
+                        <div class="domain-card" data-domain="Data Analysis">
+                            <div class="domain-icon">📊</div>
+                            <h3>Data Analysis</h3>
+                            <p>Data Exploration, Visualization, Statistics, and Pandas/Excel</p>
+                            <button class="btn btn-domain">Select</button>
+                        </div>
+
+                        <div class="domain-card" data-domain="Data Science">
+                            <div class="domain-icon">🔬</div>
+                            <h3>Data Science</h3>
+                            <p>Machine Learning, Statistical Models, and Predictive Algorithms</p>
+                            <button class="btn btn-domain">Select</button>
+                        </div>
+
+                        <div class="domain-card" data-domain="AI/ML Engineering">
+                            <div class="domain-icon">🤖</div>
+                            <h3>AI/ML Engineering</h3>
+                            <p>Deep Learning, Neural Networks, and Advanced Machine Learning</p>
+                            <button class="btn btn-domain">Select</button>
+                        </div>
+                    </div>
+
+                    <!-- Loading and Status -->
+                    <div id="statusMessage" class="status-message hidden"></div>
+                    <div id="loadingContainer" class="loading-container hidden">
+                        <div class="spinner"></div>
+                        <p id="loadingText">Generating personalized interview questions...</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="domain-actions">
+                        <a href="{{ url_for('upload_resume') }}" class="btn btn-secondary">
+                            ← Upload Different Resume
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 AI Mock Interview System</p>
+        </footer>
+    </div>
+
+    <script>
+        const domainCards = document.querySelectorAll('.domain-card');
+        const statusMessage = document.getElementById('statusMessage');
+        const loadingContainer = document.getElementById('loadingContainer');
+
+        domainCards.forEach(card => {
+            card.addEventListener('click', selectDomain);
+        });
+
+        async function selectDomain(e) {
+            const card = e.currentTarget;
+            const domain = card.getAttribute('data-domain');
+
+            // Show loading
+            loadingContainer.classList.remove('hidden');
+            statusMessage.classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/start-interview', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ domain: domain })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('selectedDomain', domain);
+                    setTimeout(() => {
+                        window.location.href = '{{ url_for("interview") }}';
+                    }, 500);
+                } else {
+                    showError(data.message || 'Failed to start interview');
+                }
+            } catch (error) {
+                showError('Network error: ' + error.message);
+            } finally {
+                loadingContainer.classList.add('hidden');
+            }
+        }
+
+        function showError(message) {
+            statusMessage.className = 'status-message error';
+            statusMessage.textContent = '❌ ' + message;
+            statusMessage.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

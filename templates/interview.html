@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview - AI Mock Interview System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-content">
+                <a href="{{ url_for('index') }}" class="navbar-title">🤖 AI Mock Interview System</a>
+                <span class="navbar-progress" id="navProgress">Question 1 of 10</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <section class="interview-section">
+                <div class="interview-container">
+                    <!-- Progress Bar -->
+                    <div class="progress-section">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <p class="progress-text" id="progressText">Question 1 of 10</p>
+                    </div>
+
+                    <!-- Question Container -->
+                    <div class="question-container">
+                        <!-- Question Header -->
+                        <div class="question-header">
+                            <h2 id="questionTitle">Loading question...</h2>
+                            <div class="question-controls">
+                                <button class="btn-icon" id="speakBtn" title="Listen to question">
+                                    🔊 Listen
+                                </button>
+                                <button class="btn-icon" id="stopSpeakBtn" title="Stop audio" style="display: none;">
+                                    ⏹️ Stop
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- MCQ Type Question -->
+                        <div id="mcqContainer" class="answer-container hidden">
+                            <div class="mcq-options" id="mcqOptions"></div>
+                        </div>
+
+                        <!-- Theory Type Question -->
+                        <div id="theoryContainer" class="answer-container hidden">
+                            <textarea id="theoryAnswer" class="theory-input" placeholder="Type your answer here..." maxlength="2000"></textarea>
+                            <div class="char-count">
+                                <span id="charCount">0</span> / 2000 characters
+                            </div>
+
+                            <!-- Voice Input Controls -->
+                            <div class="voice-controls">
+                                <button class="btn btn-secondary" id="voiceInputBtn">
+                                    🎤 Answer Using Voice
+                                </button>
+                                <span id="voiceStatus" class="voice-status"></span>
+                            </div>
+                        </div>
+
+                        <!-- Status Message -->
+                        <div id="answerStatus" class="status-message hidden"></div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="interview-navigation">
+                        <button class="btn btn-secondary" id="prevBtn" disabled>
+                            ← Previous
+                        </button>
+
+                        <div class="center-buttons">
+                            <button class="btn btn-danger" id="endInterviewBtn">
+                                End Interview
+                            </button>
+                        </div>
+
+                        <button class="btn btn-primary" id="nextBtn">
+                            Next →
+                        </button>
+                    </div>
+
+                    <!-- Submit Interview Container (shown on last question) -->
+                    <div id="submitContainer" class="submit-container hidden">
+                        <div class="submit-warning">
+                            <h3>Ready to Submit?</h3>
+                            <p>Make sure you've answered all 10 questions before submitting.</p>
+                        </div>
+                        <button class="btn btn-success" id="submitBtn">
+                            Submit Interview & Get Results
+                        </button>
+                    </div>
+
+                    <!-- Loading Indicator -->
+                    <div id="loadingContainer" class="loading-container hidden">
+                        <div class="spinner"></div>
+                        <p id="loadingText">Evaluating your answers...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 AI Mock Interview System</p>
+        </footer>
+    </div>
+
+    <!-- Confirmation Dialog -->
+    <div id="confirmDialog" class="dialog hidden">
+        <div class="dialog-content">
+            <h3>End Interview?</h3>
+            <p>Are you sure you want to end the interview? Any unanswered questions will be saved.</p>
+            <div class="dialog-buttons">
+                <button class="btn btn-secondary" id="confirmCancel">Cancel</button>
+                <button class="btn btn-danger" id="confirmEnd">End Interview</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

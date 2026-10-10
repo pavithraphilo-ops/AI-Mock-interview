@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Mock Interview System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-content">
+                <h1 class="navbar-title">🤖 AI Mock Interview System</h1>
+            </div>
+        </nav>
+
+        <!-- Home Page Content -->
+        <main class="main-content">
+            <section class="hero">
+                <div class="hero-content">
+                    <h2 class="hero-title">Welcome to AI Mock Interview System</h2>
+                    <p class="hero-subtitle">
+                        Practice technical interviews with AI-powered evaluation. Get personalized feedback based on your resume and domain expertise.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="features">
+                <div class="features-grid">
+                    <a href="{{ url_for('upload_resume') }}" class="feature-card-link">
+                        <div class="feature-card">
+                            <div class="feature-icon">📄</div>
+                            <h3>Smart Resume Analysis</h3>
+                            <p>Upload your resume (PDF, DOC, DOCX) and let AI extract your skills and experience</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ url_for('upload_resume') }}" class="feature-card-link">
+                        <div class="feature-card">
+                            <div class="feature-icon">🎯</div>
+                            <h3>Domain Selection</h3>
+                            <p>Choose from 5 technical domains: Cyber Security, Python Full Stack, Data Analysis, Data Science, and AI/ML</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ url_for('upload_resume') }}" class="feature-card-link">
+                        <div class="feature-card">
+                            <div class="feature-icon">💬</div>
+                            <h3>AI-Generated Questions</h3>
+                            <p>10 personalized questions tailored to your resume and selected domain</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ url_for('upload_resume') }}" class="feature-card-link">
+                        <div class="feature-card">
+                            <div class="feature-icon">🔊</div>
+                            <h3>Voice Support</h3>
+                            <p>Answer questions using voice input and listen to questions with voice output</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ url_for('upload_resume') }}" class="feature-card-link">
+                        <div class="feature-card">
+                            <div class="feature-icon">📊</div>
+                            <h3>Instant Evaluation</h3>
+                            <p>Get your score (1-10) with detailed feedback on strengths and areas for improvement</p>
+                        </div>
+                    </a>
+
+                    <a href="{{ url_for('upload_resume') }}" class="feature-card-link">
+                        <div class="feature-card">
+                            <div class="feature-icon">✨</div>
+                            <h3>Professional Feedback</h3>
+                            <p>Receive AI-generated recommendations and personalized recommendations</p>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- How It Works -->
+            <section class="how-it-works">
+                <h2>How It Works</h2>
+                <div class="steps-container">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Upload Resume</h3>
+                        <p>Share your resume</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Select Domain</h3>
+                        <p>Choose your field</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Take Interview</h3>
+                        <p>Answer 10 questions</p>
+                    </div>
+                    <div class="step-arrow">→</div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <h3>Get Results</h3>
+                        <p>View your score</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="cta-section">
+                <div class="cta-content">
+                    <h2>Ready to Test Your Skills?</h2>
+                    <p>Start your mock interview now and get instant feedback from our AI evaluator!</p>
+                    <a href="{{ url_for('upload_resume') }}" class="btn btn-primary btn-large">
+                        Start Mock Interview →
+                    </a>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="faq">
+                <h2>Frequently Asked Questions</h2>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <h4>What file formats can I upload?</h4>
+                        <p>You can upload PDF, DOC, or DOCX files. Maximum file size is 5MB.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>How many questions will I get?</h4>
+                        <p>You'll get exactly 10 questions: 5 MCQs based on your resume and 5 theory questions based on your selected domain.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>How is the score calculated?</h4>
+                        <p>Final score (1-10) is based on MCQ accuracy (40%) and theory answer quality (60%) evaluated by AI.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Is voice input available?</h4>
+                        <p>Yes! Voice input works on Chrome, Edge, and Firefox. Voice output is available on all browsers.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Will my resume be shared publicly?</h4>
+                        <p>No, your resume is kept private and only used for generating personalized questions.</p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can I retake the interview?</h4>
+                        <p>Yes! You can retake the interview with your current or a different resume anytime.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 AI Mock Interview System. A project for technical interview preparation.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

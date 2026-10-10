@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Resume - AI Mock Interview</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-content">
+                <a href="{{ url_for('index') }}" class="navbar-title">🤖 AI Mock Interview System</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <section class="upload-section">
+                <div class="upload-container">
+                    <h2>Upload Your Resume</h2>
+                    <p class="upload-description">
+                        Upload your resume to get personalized interview questions based on your skills and experience.
+                    </p>
+
+                    <!-- Upload Area -->
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">📄</div>
+                        <h3>Drag & Drop or Click to Upload</h3>
+                        <p>Supported formats: PDF, DOC, DOCX (Max 5MB)</p>
+                        <input type="file" id="resumeInput" accept=".pdf,.doc,.docx" hidden>
+                    </div>
+
+                    <!-- File Info -->
+                    <div id="fileInfo" class="file-info hidden">
+                        <div class="file-details">
+                            <span class="file-name" id="fileName"></span>
+                            <span class="file-size" id="fileSize"></span>
+                        </div>
+                        <button type="button" class="btn-remove" id="removeBtn">✕ Remove</button>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div id="progressContainer" class="progress-container hidden">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <p class="progress-text" id="progressText">Uploading...</p>
+                    </div>
+
+                    <!-- Status Message -->
+                    <div id="statusMessage" class="status-message hidden"></div>
+
+                    <!-- Upload Button -->
+                    <div class="upload-actions">
+                        <button type="button" class="btn btn-primary" id="uploadBtn" disabled>
+                            Upload Resume
+                        </button>
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary">
+                            Back
+                        </a>
+                    </div>
+
+                    <!-- Tips -->
+                    <div class="tips-section">
+                        <h4>Tips for Best Results:</h4>
+                        <ul>
+                            <li>Make sure your resume is clear and well-formatted</li>
+                            <li>Include all relevant skills, projects, and experience</li>
+                            <li>Mention technologies and frameworks you know</li>
+                            <li>Add any certifications or relevant coursework</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 AI Mock Interview System. Your resume data is kept private.</p>
+        </footer>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const resumeInput = document.getElementById('resumeInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const removeBtn = document.getElementById('removeBtn');
+        const statusMessage = document.getElementById('statusMessage');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressText = document.getElementById('progressText');
+        let selectedFile = null;
+
+        // Click to upload
+        uploadArea.addEventListener('click', () => resumeInput.click());
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            handleFileSelect(e.dataTransfer.files);
+        });
+
+        // File input change
+        resumeInput.addEventListener('change', (e) => {
+            handleFileSelect(e.target.files);
+        });
+
+        function handleFileSelect(files) {
+            if (files.length === 0) return;
+
+            const file = files[0];
+            const validExtensions = ['pdf', 'doc', 'docx'];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            const maxSize = 5 * 1024 * 1024; // 5MB
+
+            // Validation
+            if (!validExtensions.includes(fileExtension)) {
+                showError('Invalid file type. Please upload PDF, DOC, or DOCX');
+                resumeInput.value = '';
+                return;
+            }
+
+            if (file.size > maxSize) {
+                showError('File size exceeds 5MB limit');
+                resumeInput.value = '';
+                return;
+            }
+
+            // File selected
+            selectedFile = file;
+            uploadArea.classList.add('hidden');
+            fileInfo.classList.remove('hidden');
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            uploadBtn.disabled = false;
+            clearStatus();
+        }
+
+        removeBtn.addEventListener('click', () => {
+            selectedFile = null;
+            resumeInput.value = '';
+            uploadArea.classList.remove('hidden');
+            fileInfo.classList.add('hidden');
+            uploadBtn.disabled = true;
+            clearStatus();
+        });
+
+        uploadBtn.addEventListener('click', uploadResume);
+
+        async function uploadResume() {
+            if (!selectedFile) {
+                showError('Please select a file');
+                return;
+            }
+
+            uploadBtn.disabled = true;
+            progressContainer.classList.remove('hidden');
+
+            const formData = new FormData();
+            formData.append('resume', selectedFile);
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showSuccess(data.message);
+                    setTimeout(() => {
+                        window.location.href = '{{ url_for("select_domain") }}';
+                    }, 1500);
+                } else {
+                    showError(data.message || 'Upload failed');
+                    uploadBtn.disabled = false;
+                }
+            } catch (error) {
+                showError('Network error: ' + error.message);
+                uploadBtn.disabled = false;
+            } finally {
+                progressContainer.classList.add('hidden');
+            }
+        }
+
+        function showError(message) {
+            statusMessage.className = 'status-message error';
+            statusMessage.textContent = '❌ ' + message;
+            statusMessage.classList.remove('hidden');
+        }
+
+        function showSuccess(message) {
+            statusMessage.className = 'status-message success';
+            statusMessage.textContent = '✓ ' + message;
+            statusMessage.classList.remove('hidden');
+        }
+
+        function clearStatus() {
+            statusMessage.classList.add('hidden');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>

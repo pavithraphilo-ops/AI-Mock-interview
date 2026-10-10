@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Result - AI Mock Interview System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-content">
+                <a href="{{ url_for('index') }}" class="navbar-title">🤖 AI Mock Interview System</a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <section class="result-section">
+                <div class="result-container">
+
+                    <!-- Header -->
+                    <h2 class="result-title">Interview Complete! 🎉</h2>
+
+                    <!-- Score Card -->
+                    <div class="score-card">
+                        <div class="score-circle" id="scoreCircle">
+                            <div class="score-value" id="scoreValue">{{ scores.final_score }}</div>
+                            <div class="score-label">/ 10</div>
+                        </div>
+
+                        <div class="score-info">
+                            <h3>{{ candidate_name }} - {{ domain }}</h3>
+                            <p class="performance-level" id="performanceLevel">
+                                Performance: {{ scores.performance_level }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Results -->
+                    <div class="results-grid">
+                        <!-- MCQ Results -->
+                        <div class="result-card">
+                            <h3>MCQ Section</h3>
+                            <div class="result-bar">
+                                <div class="result-label">Score</div>
+                                <div class="result-value">{{ scores.mcq.mcq_score }} / 5</div>
+                            </div>
+                            <p class="result-detail">
+                                {{ scores.mcq.correct_count }} out of {{ scores.mcq.total_count }} correct
+                                ({{ scores.mcq.percentage }}%)
+                            </p>
+                            <div class="progress-bar small">
+                                <div class="progress-fill" style="width: {{ scores.mcq.percentage }}%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Theory Results -->
+                        <div class="result-card">
+                            <h3>Theory Section</h3>
+                            <div class="result-bar">
+                                <div class="result-label">Score</div>
+                                <div class="result-value">{{ scores.theory.theory_score }} / 5</div>
+                            </div>
+                            <p class="result-detail">
+                                Average: {{ scores.theory.theory_average }}/5 per question
+                            </p>
+                            <div class="progress-bar small">
+                                <div class="progress-fill" style="width: {{ (scores.theory.theory_score / 5) * 100 }}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Feedback -->
+                    <div class="feedback-section">
+                        <h2>AI Feedback & Analysis</h2>
+
+                        <!-- Recommendation -->
+                        <div class="recommendation-box">
+                            <h3>Recommendation</h3>
+                            <p class="recommendation-text">{{ feedback.recommendation }}</p>
+                        </div>
+
+                        <!-- Summary -->
+                        <div class="summary-box">
+                            <h3>Interview Summary</h3>
+                            <p>{{ feedback.interview_summary }}</p>
+                        </div>
+
+                        <!-- Strengths -->
+                        <div class="strengths-box">
+                            <h3>✓ Strengths</h3>
+                            <ul class="strengths-list">
+                                {% for strength in feedback.strengths %}
+                                <li>{{ strength }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Weaknesses -->
+                        <div class="weaknesses-box">
+                            <h3>⚠ Areas for Improvement</h3>
+                            <ul class="weaknesses-list">
+                                {% for weakness in feedback.weaknesses %}
+                                <li>{{ weakness }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <!-- Topics to Study -->
+                        <div class="topics-box">
+                            <h3>📚 Recommended Topics to Study</h3>
+                            <div class="topics-grid">
+                                {% for topic in feedback.topics_to_study %}
+                                <div class="topic-tag">{{ topic }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Score Breakdown -->
+                    <div class="breakdown-section">
+                        <h2>Score Breakdown</h2>
+                        <div class="breakdown-grid">
+                            <div class="breakdown-item">
+                                <div class="breakdown-icon">📝</div>
+                                <h4>Total Questions</h4>
+                                <p class="breakdown-value">10</p>
+                            </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-icon">✓</div>
+                                <h4>Correct MCQs</h4>
+                                <p class="breakdown-value">{{ scores.mcq.correct_count }} / 5</p>
+                            </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-icon">📊</div>
+                                <h4>Theory Average</h4>
+                                <p class="breakdown-value">{{ scores.theory.theory_average }} / 5</p>
+                            </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-icon">⭐</div>
+                                <h4>Final Score</h4>
+                                <p class="breakdown-value">{{ scores.final_score }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Share Results -->
+                    <div class="share-section">
+                        <h3>Share Your Results</h3>
+                        <p>Congratulations on completing your mock interview! You scored {{ scores.final_score }}/10.</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="result-actions">
+                        <a href="{{ url_for('retake') }}" class="btn btn-primary btn-large">
+                            🔄 Retake Interview
+                        </a>
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary btn-large">
+                            Back to Home
+                        </a>
+                    </div>
+
+                    <!-- Footer Info -->
+                    <div class="result-footer">
+                        <p>💡 <strong>Next Steps:</strong> Focus on the areas for improvement and retake the interview to improve your score!</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 AI Mock Interview System. Keep practicing to improve your technical skills!</p>
+        </footer>
+    </div>
+
+    <script>
+        // Animate score circle on load
+        window.addEventListener('load', () => {
+            const scoreCircle = document.getElementById('scoreCircle');
+            scoreCircle.style.animation = 'pulseScore 0.6s ease-out';
+        });
+    </script>
+
+    <style>
+        @keyframes pulseScore {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</body>
+</html>
